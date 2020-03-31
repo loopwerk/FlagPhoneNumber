@@ -33,6 +33,7 @@ open class FPNTextField: UITextField {
 	private lazy var phoneUtil: NBPhoneNumberUtil = NBPhoneNumberUtil()
 	private var nbPhoneNumber: NBPhoneNumber?
 	private var formatter: NBAsYouTypeFormatter?
+  private var exampleNumberType: NBEPhoneNumberType = .MOBILE
 
 	open var flagButton: UIButton = UIButton()
 
@@ -152,7 +153,7 @@ open class FPNTextField: UITextField {
 
 		NSLayoutConstraint(item: flagButton, attribute: .leading, relatedBy: .equal, toItem: leftView, attribute: .leading, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .leading, relatedBy: .equal, toItem: flagButton, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
-		NSLayoutConstraint(item: phoneCodeTextField, attribute: .trailing, relatedBy: .equal, toItem: leftView, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+		NSLayoutConstraint(item: phoneCodeTextField, attribute: .trailing, relatedBy: .equal, toItem: leftView, attribute: .trailing, multiplier: 1, constant: 10).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .top, relatedBy: .equal, toItem: leftView, attribute: .top, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .bottom, relatedBy: .equal, toItem: leftView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
 	}
@@ -328,6 +329,12 @@ open class FPNTextField: UITextField {
 		countryRepository.setup(with: countryCodes)
 	}
 
+  /// Set the example phone number type
+  public func set(exampleNumberType: NBEPhoneNumberType) {
+      self.exampleNumberType = exampleNumberType
+      updatePlaceholder()
+  }
+
 	// Private
 
 	@objc private func didEditText() {
@@ -446,7 +453,7 @@ open class FPNTextField: UITextField {
 	private func updatePlaceholder() {
 		if let countryCode = selectedCountry?.code {
 			do {
-				let example = try phoneUtil.getExampleNumber(countryCode.rawValue)
+				let example = try phoneUtil.getExampleNumber(forType: countryCode.rawValue, type: exampleNumberType)
 				let phoneNumber = "+\(example.countryCode.stringValue)\(example.nationalNumber.stringValue)"
 
 				if let inputString = formatter?.inputString(phoneNumber) {
