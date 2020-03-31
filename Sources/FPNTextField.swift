@@ -19,17 +19,7 @@ open class FPNTextField: UITextField {
 
 	private var flagWidthConstraint: NSLayoutConstraint?
 	private var flagHeightConstraint: NSLayoutConstraint?
-
-	/// The size of the leftView
-	private var leftViewSize: CGSize {
-		let width = flagButtonSize.width + getWidth(text: phoneCodeTextField.text!)
-		let height = bounds.height
-
-		return CGSize(width: width, height: height)
-	}
-
 	private var phoneCodeTextField: UITextField = UITextField()
-
 	private lazy var phoneUtil: NBPhoneNumberUtil = NBPhoneNumberUtil()
 	private var nbPhoneNumber: NBPhoneNumber?
 	private var formatter: NBAsYouTypeFormatter?
@@ -82,23 +72,20 @@ open class FPNTextField: UITextField {
 
 	init() {
 		super.init(frame: .zero)
-
 		setup()
 	}
 
 	public override init(frame: CGRect) {
 		super.init(frame: frame)
-
 		setup()
 	}
 
 	required public init?(coder aDecoder: NSCoder) {
 		super.init(coder: aDecoder)
-
 		setup()
 	}
 
-	private func setup() {
+	func setup() {
 		leftViewMode = .always
 
 		setupFlagButton()
@@ -153,7 +140,7 @@ open class FPNTextField: UITextField {
 
 		NSLayoutConstraint(item: flagButton, attribute: .leading, relatedBy: .equal, toItem: leftView, attribute: .leading, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .leading, relatedBy: .equal, toItem: flagButton, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
-		NSLayoutConstraint(item: phoneCodeTextField, attribute: .trailing, relatedBy: .equal, toItem: leftView, attribute: .trailing, multiplier: 1, constant: 10).isActive = true
+		NSLayoutConstraint(item: phoneCodeTextField, attribute: .trailing, relatedBy: .equal, toItem: leftView, attribute: .trailing, multiplier: 1, constant: -8).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .top, relatedBy: .equal, toItem: leftView, attribute: .top, multiplier: 1, constant: 0).isActive = true
 		NSLayoutConstraint(item: phoneCodeTextField, attribute: .bottom, relatedBy: .equal, toItem: leftView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
 	}
@@ -163,15 +150,6 @@ open class FPNTextField: UITextField {
 
 		flagWidthConstraint?.constant = flagButtonSize.width
 		flagHeightConstraint?.constant = flagButtonSize.height
-	}
-
-	open override func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-		let size = leftViewSize
-		let width: CGFloat = min(bounds.size.width, size.width)
-		let height: CGFloat = min(bounds.size.height, size.height)
-		let newRect: CGRect = CGRect(x: bounds.minX, y: bounds.minY, width: width, height: height)
-
-		return newRect
 	}
 
 	@objc private func displayNumberKeyBoard() {
