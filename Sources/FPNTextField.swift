@@ -85,7 +85,7 @@ open class FPNTextField: UITextField {
 		setup()
 	}
 
-	public func setup() {
+	open func setup() {
 		leftViewMode = .always
 
 		setupFlagButton()
